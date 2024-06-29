@@ -51,12 +51,15 @@ struct ContentView: View {
         }
     }
 
+    @FocusState private var lengthIsFocused: Bool
+
     var body: some View {
         NavigationStack {
             Form {
                 Section("Packet Length in Bytes") {
                     TextField("", value: $packetSizeInBytes, format: .number)
                         .keyboardType(.numberPad)
+                        .focused($lengthIsFocused)
                 }
 
                 Section("Interface") {
@@ -81,11 +84,23 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    VStack {
-                        Text("PacketTime").font(.largeTitle)
-                        Text("Calculate the Time Duration of a Packets").font(.subheadline)
+                    ZStack {
+                        VStack {
+                            Text("PacketTime").font(.largeTitle)
+                            Text("Calculate the Time Duration of a Packets").font(.subheadline)
+                        }
+                        .padding(.top, 40)
+                        HStack {
+                            Spacer()
+                            if lengthIsFocused {
+                                Button {
+                                    lengthIsFocused = false
+                                } label: {
+                                    Text("Done").bold()
+                                }
+                            }
+                        }
                     }
-                    .padding(.top, 40)
                 }
             }
         }
